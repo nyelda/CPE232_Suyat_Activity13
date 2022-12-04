@@ -1,0 +1,78 @@
+- name: Install Network Time Protocol in Ubuntu
+  apt:
+    name:
+      - chrony
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: "NTP service restart/enable"
+  service:
+    name: chrony
+    state: restarted
+    enabled: true
+
+- name: Install Openstack package (Client) in Ubuntu
+  apt:
+    name:
+      - python3-openstackclient
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install SQL database for Ubuntu
+  apt:
+    name:
+      - mariadb-server
+      - python3-pymysql
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: "mysql service restart/enable"
+  service:
+    name: mysql
+    state: restarted
+    enabled: true
+
+- name: Install Message Queue in Ubuntu
+  apt:
+    name:
+      - rabbitmq-server
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Add the openstack user
+  community.rabbitmq.rabbitmq_user:
+    user: openstack
+    password: RABBIT_PASS
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install Memcached in Ubuntu
+  apt:
+    name:
+      - memcached
+      - python3-memcache
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Memcached service restart/enable"
+  service:
+    name: memcached
+    state: restarted
+    enabled: true
+
+- name: Install etcd in Ubuntu
+  apt:
+    name:
+      - etcd
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: "etcd service restart/enable"
+  service:
+    name: etcd
+    state: restarted
+    enabled: true
